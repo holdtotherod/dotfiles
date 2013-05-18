@@ -16,7 +16,7 @@ $filepaths = [
 def install
   print "Installing dotfiles..."
   if already_installed?
-    print "already installed."
+    puts "already installed."
     sync
   else
     puts
