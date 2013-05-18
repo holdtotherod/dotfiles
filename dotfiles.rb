@@ -11,14 +11,6 @@ $filepaths = [
   "~/.gitignore_global"
 ]
 
-# Main
-case ARGV[0]
-when "sync"
-  sync
-else
-  install
-end
-
 # Script commands
 
 def install
@@ -80,4 +72,13 @@ end
 
 def git_repos_dir
   $git_repos_dir
+end
+
+# Main
+
+case ARGV[0]
+when "sync"
+  sync
+else
+  install
 end
