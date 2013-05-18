@@ -8,7 +8,8 @@ $filepaths = [
   "~/.vimrc",
   "~/.gitconfig",
   "~/.git-completion.bash",
-  "~/.gitignore_global"
+  "~/.gitignore_global",
+  "~/.ssh/lottermoser_key.pub"
 ]
 
 # Script commands
@@ -23,6 +24,8 @@ def install
     checkout_repo
     remove_existing_files
     symlink_files
+    use_repo_ssh_url
+    decrypt_ssh_config
     puts "done."
   end
 end
@@ -34,6 +37,7 @@ def sync
   `git stash`
   `git pull --rebase`
   `git stash pop`
+  decrypt_ssh_config
   Dir.chdir pwd
   puts "done."
 end
@@ -62,6 +66,21 @@ def symlink_files
   end
 end
 
+def decrypt_ssh_config
+  # Don't symlink the ssh config to make sure to encrypt it before committing it
+  # Encrypt ssh config file: `openssl enc -aes-256-cbc -salt -in ~/.ssh/config -out ssh_config.enc`
+  config_source_path = File.expand_path "#{dotfiles_repo_path}/ssh_config.enc"
+  config_target_path = File.expand_path "~/.ssh/config"
+  `openssl enc -d -aes-256-cbc -in #{config_source_path} -out #{config_target_path}`
+end
+
+def use_repo_ssh_url
+  pwd = Dir.pwd
+  Dir.chdir dotfiles_repo_path
+  `git remote set-url origin #{dotfiles_repo_ssh_url}`
+  Dir.chdir pwd
+end
+
 def file_or_symlink_exists?(filepath)
   filepath = File.expand_path filepath
   File.exists?(filepath) || File.symlink?(filepath)
@@ -74,6 +93,11 @@ end
 
 def dotfiles_repo_url
   $dotfiles_repo_url
+end
+
+def dotfiles_repo_ssh_url
+  ssh_url = dotfiles_repo_url.sub "https://", "git@"
+  ssh_url.sub! "/", ":"
 end
 
 def git_repos_dir
