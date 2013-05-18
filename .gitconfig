@@ -1,0 +1,39 @@
+[color]
+	diff = always
+	ui = true
+[user]
+	name = Stephen Lottermoser
+	email = holdtotherod@gmail.com
+[core]
+	editor = /usr/bin/vim
+	excludesfile = ~/.gitignore_global
+[alias]
+log-same-line = log --graph --all --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(bold white)— %an%C(reset)%C(bold yellow)%d%C(reset)' --abbrev-commit --date=relative
+log-diff-line = log --graph --all --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(bold white)— %an%C(reset)' --abbrev-commit
+gerrit-submit = "!bash -c ' \
+    local_ref=$(git symbolic-ref HEAD); \
+    local_name=${local_ref##refs/heads/}; \
+    remote=$(git config branch.\"$local_name\".remote || echo origin); \
+    remote_ref=$(git config branch.\"$local_name\".merge); \
+    remote_name=${remote_ref##refs/heads/}; \
+    remote_review_ref=\"refs/for/$remote_name\"; \
+    r=\"\"; \
+    if [[ $0 != \"\" && $0 != \"bash\" ]]; then r=\"--reviewer=$0\"; fi; \
+    if [[ $1 != \"\" ]]; then r=\"$r --reviewer=$1\"; fi; \
+    if [[ $2 != \"\" ]]; then r=\"$r --reviewer=$2\"; fi; \
+    if [[ $3 != \"\" ]]; then r=\"$r --reviewer=$3\"; fi; \
+    if [[ $4 != \"\" ]]; then r=\"$r --reviewer=$4\"; fi; \
+    git push --receive-pack=\"gerrit receive-pack $r\" $remote HEAD:$remote_review_ref'"
+[difftool "Kaleidoscope"]
+	cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
+[diff]
+	tool = Kaleidoscope
+[difftool]
+	prompt = false
+[mergetool "Kaleidoscope"]
+	cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+	trustExitCode = true
+[mergetool]
+	prompt = false
+[merge]
+	tool = Kaleidoscope
