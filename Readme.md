@@ -5,7 +5,9 @@ All the files I need to make a new machine usable on the command-line.
 
 ## Installation
 
+```bash
 ruby -e "$(curl -fsSL https://raw.github.com/holdtotherod/dotfiles/master/dotfiles.rb)"
+```
 
 ## What it does
 
