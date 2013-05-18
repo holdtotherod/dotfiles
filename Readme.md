@@ -6,7 +6,7 @@ All the files I need to make a new machine usable on the command-line.
 ### Installation
 
 ```bash
-ruby -e "$(curl -fsSL https://raw.github.com/holdtotherod/dotfiles/master/dotfiles.rb)"
+ruby -e "$(curl -fsSL https://raw.github.com/holdtotherod/dotfiles/master/dotfiles.rb)" && source ~/.profile
 ```
 
 ### What it does

@@ -16,7 +16,8 @@ $filepaths = [
 def install
   print "Installing dotfiles..."
   if already_installed?
-    puts "already installed."
+    print "already installed."
+    sync
   else
     puts
     checkout_repo
@@ -27,13 +28,13 @@ def install
 end
 
 def sync
-  puts "Syncing dotfiles..."
-  `pushd #{dotfiles_repo_path}`
+  print "Syncing dotfiles..."
+  pwd = Dir.pwd
+  Dir.chdir dotfiles_repo_path
   `git stash`
   `git pull --rebase`
   `git stash pop`
-  `popd`
-  `source ~/.profile`
+  Dir.chdir pwd
   puts "done."
 end
 
@@ -68,7 +69,7 @@ end
 
 def dotfiles_repo_path
   repo_foldername = File.basename dotfiles_repo_url, ".git"
-  "#{git_repos_dir}/#{repo_foldername}"
+  File.expand_path "#{git_repos_dir}/#{repo_foldername}"
 end
 
 def dotfiles_repo_url
