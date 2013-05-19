@@ -16,13 +16,12 @@ Keeps everything in sync!
 Install:
 - Clones this repo to `~/repos/dotfiles`
 - Symlinks all the files to their proper place, removing exiting files if necessary
+- Prompts for password to decrypt ssh config file, and copies it to `~/.ssh`
 
 Sync:
 - Pulls in new changes
-- `source ~/.profile`
+- Prompts for password to decrypt ssh config file, and copies it to `~/.ssh`
 
-### Coming soon
-- Add my ssh pub key into `~/.ssh/authorized_keys`
-- encrypted `~/.ssh/config` file?
+Feel free to fork and use yourself. Make sure to change the repo url, and use your ssh pub key instead.
 
  
